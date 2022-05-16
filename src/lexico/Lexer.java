@@ -13,7 +13,7 @@ import tabelaDeSimbolos.Tipo;
  * @author pedro
  */
 public class Lexer {
-    public PushbackInputStream arquivo;
+    public InputStreamReader arquivo;
     public static int linha = 1;
     public static List<String> erros = new ArrayList<String>();
     public char ponteiro = ' ';
@@ -43,7 +43,7 @@ public class Lexer {
         reserva(Tipo.CHAR);
     }
     
-    public void analiseLexica(PushbackInputStream arquivo) throws IOException{
+    public void analiseLexica(InputStreamReader arquivo) throws IOException{
         this.arquivo = arquivo;
         do {
             Token retorno = scan();
@@ -198,7 +198,9 @@ public class Lexer {
             do{
                 buffer.append(ponteiro);
                 readch();
+                
             } while(Character.isLetterOrDigit(ponteiro));
+            
             String lexema = buffer.toString();
             Palavra palavra = (Palavra)palavras.get(lexema);
             if (palavra != null) return palavra;
