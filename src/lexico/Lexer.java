@@ -185,11 +185,16 @@ public class Lexer {
             if (ponteiro != '.') return new Inteiro(value);
             float real = value;
             float denominador = 10;
+            readch();
+            if (!Character.isDigit(ponteiro)){
+                erroLexico(Tag.FLOAT_MAL_FORMADO);
+                return null;
+            }
             for (;;){
-                readch();
-                if (! Character.isDigit(ponteiro)) break;
+                if (!Character.isDigit(ponteiro)) break;
                 real += Character.digit(ponteiro, 10) / denominador;
                 denominador *= 10;
+                readch();
             }
             return new Real(real);
         }

@@ -17,7 +17,7 @@ public enum Tag {
     LITERAL_MAL_FORMADO,
     TOKEN_MAL_FORMADO,
     ATRIBUICAO_MAL_FORMADA,
-    ERRO,
+    FLOAT_MAL_FORMADO,
     // Tipos de Variáveis
     INT,
     FLOAT,
