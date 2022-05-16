@@ -157,7 +157,6 @@ public class Lexer {
                         return null;
                     }
                     buff.append(ponteiro);
-                    readch();
                 } while(!readch('\''));
                 buff.append('\'');
                 String char_const = buff.toString();
