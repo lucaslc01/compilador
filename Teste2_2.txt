@@ -1,6 +1,7 @@
 routine
+declare
  int a, b, c;
- float d, var
+ float d, var;
 begin
  read (a);
  b := a * a;

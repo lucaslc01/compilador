@@ -10,13 +10,15 @@ import lexico.*;
  * @author pedro
  */
 public class Tipo extends Palavra {
-
-    public Tipo(String lexema, Tag tag) {
+    public int width = 0;
+    public Tipo(String lexema, Tag tag, int width) {
         super(lexema, tag);
+        this.width = width;
     }
-    public static final Tipo INT = new Tipo("int", Tag.INT);
-    public static final Tipo FLOAT = new Tipo("float", Tag.FLOAT);
-    public static final Tipo CHAR = new Tipo("char", Tag.CHAR);
+    public static final Tipo INT = new Tipo("int", Tag.BASIC, 4);
+    public static final Tipo FLOAT = new Tipo("float", Tag.BASIC, 8);
+    public static final Tipo CHAR = new Tipo("char", Tag.BASIC, 1);
+    public static final Tipo BOOL = new Tipo("bool", Tag.BOOL, 1);
     
     // Funções para conversão de Tipo
     public static boolean numerico(Tipo tipo){

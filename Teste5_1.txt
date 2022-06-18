@@ -1,3 +1,4 @@
+routine
 declare
  integer a, b, c, maior;
  char outro;

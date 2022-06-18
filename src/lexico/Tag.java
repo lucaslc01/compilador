@@ -18,10 +18,12 @@ public enum Tag {
     TOKEN_MAL_FORMADO,
     ATRIBUICAO_MAL_FORMADA,
     FLOAT_MAL_FORMADO,
+    TEMP,
+    INDEX,
+    OPERADOR_INCORRETO,
     // Tipos de Variáveis
-    INT,
-    FLOAT,
-    CHAR,
+    BASIC,  // INT, FLOAT, CHAR,
+    BOOL,
     
     // Padrões de Tokens
     // integer_const ::= digit+
@@ -46,6 +48,8 @@ public enum Tag {
     OR,          // or
     AND,         // and
     NOT,         // not
+    TRUE,        // true
+    FALSE,       // false
     // Aritméticos
     SOMA,           // +
     // Tag Subtracao e para a producao de fator-a ::= - factor

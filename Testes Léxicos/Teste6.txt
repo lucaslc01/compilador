@@ -1,0 +1,17 @@
+routine
+declare
+ float raio, volume;
+ begin
+  raio := 0;
+  volume := 0;
+
+  write("ESTE PROGRAMA MOSTRA O VOLUME DE UMA ESFERA DE ACORDO COM O RAIO.");
+  write("Digite o valor do RAIO: ");
+  read(raio); %Armazenado o valor na variavel raio%
+  
+  volume := 4 * 3.14 * raio * (raio/3); %Calculando o volume da esfera%
+
+  write("O volume da esfera e: ");
+  write(volume);
+
+ end

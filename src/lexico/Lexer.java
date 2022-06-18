@@ -21,7 +21,7 @@ public class Lexer {
     void reserva(Palavra palavra) {
         palavras.put(palavra.lexema, palavra);
     }
-    public Lexer(){
+    public Lexer(InputStreamReader arquivo){
         reserva(new Palavra("routine", Tag.ROUTINE));
         reserva(new Palavra("begin", Tag.BEGIN));
         reserva(new Palavra("end", Tag.END));
@@ -41,6 +41,7 @@ public class Lexer {
         reserva(Tipo.INT);
         reserva(Tipo.FLOAT);
         reserva(Tipo.CHAR);
+        this.arquivo = arquivo;
     }
     
     public void analiseLexica(InputStreamReader arquivo) throws IOException{
@@ -61,7 +62,7 @@ public class Lexer {
     }
     
     public void erroLexico(Tag tag){
-        erros.add(tag.toString()+" Linha = "+linha);
+        erros.add(tag.toString()+" Linha = "+linha+"\n");
     }
     
     
@@ -83,7 +84,6 @@ public class Lexer {
             if (ponteiro == '\n') linha = linha + 1;
             else if (ponteiro != ' ' && ponteiro != '\t' && (int)ponteiro != 13) break;
         } // Leia até encontrar algo diferente de espaço e tabulação
-        
         // Construção de operadores relacionais
         switch(ponteiro){
             case (char)-1:

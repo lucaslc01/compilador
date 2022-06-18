@@ -21,6 +21,9 @@ public class Palavra extends Token{
     public static final Palavra MENOR_QUE = new Palavra("<", Tag.MENOR_QUE);
     public static final Palavra MENOR_IGUAL = new Palavra("<=", Tag.MENOR_IGUAL);
     public static final Palavra DIFERENTE = new Palavra("<>", Tag.DIFERENTE);
+    public static final Palavra TEMP = new Palavra("t", Tag.TEMP);
+    public static final Palavra TRUE = new Palavra("true", Tag.TRUE);
+    public static final Palavra FALSE = new Palavra("false", Tag.FALSE);
     
     @Override
     public String toString() {

@@ -8,6 +8,7 @@ import java.io.*;
 import javax.swing.JOptionPane;
 import lexico.*;
 import java.nio.charset.StandardCharsets;
+import sintatico.*;
 //import lexico.*;
 /**
  *
@@ -22,8 +23,10 @@ public class Compilador {
         // TODO code application logic here
         String file = JOptionPane.showInputDialog("Entre com o nome do arquivo: ");
         InputStreamReader input = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-        Lexer analisadorLexico = new Lexer();
-        analisadorLexico.analiseLexica(input);
+        Lexer analisadorLexico = new Lexer(input);
+        Parser parser = new Parser(analisadorLexico);
+        parser.program();
+        // analisadorLexico.analiseLexica(input);
         
         
     }

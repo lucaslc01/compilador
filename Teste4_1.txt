@@ -3,8 +3,8 @@ declare
  int pontuacao, pontuacaoMaxina, disponibilidade;
  char pontuacaoMinima;
 begin
- pontuacaoMinima = 50;
- pontuacaoMaxima = 100;
+ pontuacaoMinima := 50;
+ pontuacaoMaxima := 100;
  write("Pontuacao do candidato: ");
  read(pontuacao);
  write("Disponibilidade do candidato: ");
@@ -12,15 +12,15 @@ begin
 %
 Processamento
 %
- while (pontuacao>0 and (pontuacao<=pontuacaoMaxima) do
+ while (pontuacao>0 and (pontuacao<=pontuacaoMaxima)) do
  if ((pontuação > pontuacaoMinima) and (disponibilidade=1)) then
  write("Candidato aprovado.")
  else
  write("Candidato reprovado.")
- end
+ end;
  write("Pontuacao do candidato: ");
  read(pontuacao);
  write("Disponibilidade do candidato: ");
  read(disponibilidade);
- end;
+ end
 end

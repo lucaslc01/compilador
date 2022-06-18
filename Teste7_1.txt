@@ -1,0 +1,34 @@
+routine
+declare
+ int dias, dia, meses, mes, anos, ano, calculo, diaatual, mesatual, anoatual;
+ begin
+  %Programa que calcula idades baseado na data de nascimento%
+  diaatual := 3;
+  mesatual := 9;
+  anoatual := 2022;
+
+  write("Insira os dados pessoais. ");
+  write("Dia de nascimento da pessoa: ");
+  read(dia);
+  write("Mês de nascimento da pessoa: ");
+  read(mes);
+  write("Ano de nascimento da pessoa: ");
+  read(ano);
+
+  calculo := 365*anoatual + 30*mesatual + diaatual - 365*ano - 30*mes - dia;
+  
+  anos := calculo/365;
+
+  meses := calculo/30;
+
+  dias := calculo - (calculo*365*30);
+
+  write("Você tem: ");
+  write(anos);
+  write(", ");
+  write(meses);
+  write(" e ");
+  write(dias);
+  write(" de idade.")
+
+ end
