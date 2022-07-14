@@ -11,6 +11,7 @@ import tabelaDeSimbolos.Tipo;
  *
  * @author pedro
  */
+// Repeat Stmt Until Expr
 public class Repeat extends Stmt{
     Expr expr;
     Stmt stmt;
@@ -25,7 +26,7 @@ public class Repeat extends Stmt{
     }
     public void gen(int b, int a) {
         after = a;
-        int label = newlabel();
+        int label = newlabel(); // Rótulo para Expr
         stmt.gen(b, label);
         emitlabel(label);
         expr.jumping(b, 0);

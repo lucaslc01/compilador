@@ -25,6 +25,7 @@ public class Set extends Stmt {
         if (p1 == Tipo.BOOL && p2 == Tipo.BOOL) return p2;
         return null;
     }
+    // Gera uma instrução de Três endereços
     public void gen(int b, int a){
         emit(id.toString()+" = "+expr.gen().toString());
     }

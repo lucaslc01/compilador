@@ -12,9 +12,11 @@ import tabelaDeSimbolos.Tipo;
  *
  * @author pedro
  */
+// Funcionalidades Básicas para Or, And e Not
 public class Logical extends Expr{
     public Expr expr1, expr2;
-
+    
+    // Operador Token e operandos Expr1 e Expr2
     public Logical(Token token, Expr expr1, Expr expr2) {
         super(token, null);
         this.expr1 = expr1;
@@ -22,6 +24,7 @@ public class Logical extends Expr{
         tipo = check(expr1.tipo, expr2.tipo);
         if (tipo == null) error("Erro de Tipo");
     }
+    // Garantir que os operadores são booleanos
     public Tipo check(Tipo tipo1, Tipo tipo2) {
         if (tipo1 == Tipo.BOOL && tipo2 == Tipo.BOOL) {
             return Tipo.BOOL;

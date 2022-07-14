@@ -14,7 +14,8 @@ import tabelaDeSimbolos.Tipo;
 public class Else extends Stmt {
     Expr expr;
     Stmt stmt1, stmt2;
-
+    
+    // Condicionais If-Else
     public Else(Expr expr, Stmt stmt1, Stmt stmt2) {
         this.expr = expr;
         this.stmt1 = stmt1;

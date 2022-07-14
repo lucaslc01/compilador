@@ -20,7 +20,7 @@ import tabelaDeSimbolos.*;
 public class Parser {
     private Lexer lexico; 
     private Token look;
-    Env top = null; // Tabela de símbolos corrente
+    Env top = null; // Tabela de símbolos corrente ou do Topo
     int used = 0;   // Memória usada para declarações
     private static Vector<Tag> relop = new Vector<Tag>();
     private static Vector<Tag> addop = new Vector<Tag>();
@@ -82,15 +82,14 @@ public class Parser {
     public void program() throws IOException{
         // program ::= **routine** body
         match(Tag.ROUTINE);
-        Env savedEnv = top;
-        top = new Env(top);
         Stmt s = body();
-        /**top = savedEnv;
+        // Geração do Código intermediário
         int begin = s.newlabel();
         int after = s.newlabel();
         s.emitlabel(begin);
         s.gen(begin, after);
-        s.emitlabel(after);**/
+        s.emitlabel(after);
+
         if (Lexer.erros.size()>0){
             System.out.println("Erros Léxicos");
             for(String msg : Lexer.erros){
@@ -103,14 +102,18 @@ public class Parser {
                 System.out.print(msg);
             }
         }
+        s.returnErros();
         System.out.println("Terminou");
     }
     public Stmt body() throws IOException{
         // body ::= [decl-list] **begin** stmt-list **end**
+        Env savedEnv = top;
+        top = new Env(top); // Elo entre as tabelas de símbolos
         decl_list();
         match(Tag.BEGIN);
         Stmt s = stmt_list();
         match(Tag.END);
+        top = savedEnv;
         return s;
     }
     public void decl_list() throws IOException{
@@ -123,188 +126,280 @@ public class Parser {
     }
     public void decl() throws IOException{
         // decl ::= [**int** | **float** | **char**] ident-list
+        Tipo p = (Tipo)look;
         match(Tag.BASIC);
-        ident_list();
+        ident_list(p);
     }
-    public void ident_list() throws IOException{
+    public void ident_list(Tipo p) throws IOException{
         // ident-list ::= identifier {"," identifier}
+        Token token = look;
         match(Tag.IDENTIFICADOR);
+        Id id = new Id((Palavra) token, p, used); // Cria o elemento da tabela
+        used = used + p.width; // Desloca o offset
         while(look.tag == Tag.VIRGULA) {
+            top.put(token, id); // Adiciona o token na tabela de símbolos
             match(Tag.VIRGULA);
+            token = look;
             match(Tag.IDENTIFICADOR);
-        } 
+            id = new Id((Palavra) token, p, used);
+            used = used + p.width;
+        }
+        top.put(token, id); // Adiciona o token na tabela de símbolos
     }
     public Stmt stmt_list() throws IOException{
         // stmt-list ::= stmt {";" stmt}
-        stmt();
-        
-        while(look.tag == Tag.PONTO_VIRGULA){
+        Stmt s = stmt();
+        if (look.tag == Tag.PONTO_VIRGULA){
             match(Tag.PONTO_VIRGULA);
-            stmt();
+            return new Seq(s, stmt_list());
         }
-        
-        return null;
+        return s;
+//        stmt();
+//        
+//        while(look.tag == Tag.PONTO_VIRGULA){
+//            match(Tag.PONTO_VIRGULA);
+//            stmt();
+//        }
+//        
+//        return null;
     }
-    public void stmt() throws IOException{
+    public Stmt stmt() throws IOException{
         // stmt ::= assign-stmt | if-stmt | while-stmt |
         //          repeat-stmt | read-stmt | write-stmt
+        
+        
         if (look.tag == Tag.IDENTIFICADOR){
-            assign_stmt();
+            return assign_stmt();
         } else if (look.tag == Tag.IF){
-            if_stmt();
+            return if_stmt();
         } else if (look.tag == Tag.WHILE){
-            while_stmt();
+            Stmt savedStmt = Stmt.Enclosing;// Guarda o loop
+            return while_stmt(savedStmt);
         } else if (look.tag == Tag.REPEAT){
-            repeat_stmt();
+            Stmt savedStmt = Stmt.Enclosing;// Guarda o loop
+            return repeat_stmt(savedStmt);
         } else if (look.tag == Tag.READ){
             read_stmt();
+            return Stmt.Null;
         } else if (look.tag == Tag.WRITE){
-            write_stmt();
+            return write_stmt();
         } else {
             error("Esperava um IF, WHILE, REPEAT, READ, WRITE");
-        }  
+            return Stmt.Null;
+        }
     }
-    public void assign_stmt() throws IOException{
+    public Stmt assign_stmt() throws IOException{
         // assign-stmt ::= identifier ":=" simple_expr
+        Stmt stmt;
+        Token token = look;
         match(Tag.IDENTIFICADOR);
+        Id id = top.get(token);
+        if (id == null) {
+            error(token.toString()+ " Não declarado");
+            id = new Id((Palavra) token, Tipo.ERROR, 0);
+            top.put(token, id);
+        }
         match(Tag.ATRIBUICAO);
-        simple_expr();
+        stmt = new Set(id, simple_expr());
+        return stmt;
+        
     }
-    public void if_stmt() throws IOException{
+    public Stmt if_stmt() throws IOException{
         // if-stmt ::= if condition then stmt-list end | 
         //             if condition then stmt-list else stmt-list end
         match(Tag.IF);
-        condition();
+        Expr expr = condition();
         match(Tag.THEN);
-        stmt_list();
+        Stmt s1 = stmt_list();
         if (look.tag == Tag.ELSE) {
             match(Tag.ELSE);
-            stmt_list();
+            Stmt s2 = stmt_list();
+            return new Else(expr, s1, s2);
         }
         match(Tag.END);
+        return new If(expr, s1);
     }
-    public void condition() throws IOException{
+    public Expr condition() throws IOException{
         // condition ::= expression
-        expression();
+        return expression();
     }
-    public void repeat_stmt() throws IOException{
+    public Stmt repeat_stmt(Stmt savedStmt) throws IOException{
         // repeat-stmt ::= **repeat** stmt-list stmt-suffix
+        Repeat repeatnode = new Repeat();
+        Stmt.Enclosing = repeatnode;
         match(Tag.REPEAT);
-        stmt_list();
-        stmt_suffix();
+        Stmt s1 = stmt_list();
+        Expr expr = stmt_suffix();
+        repeatnode.init(s1, expr);
+        Stmt.Enclosing = savedStmt;
+        return repeatnode;
     }
-    public void stmt_suffix() throws IOException{
+    public Expr stmt_suffix() throws IOException{
         // stmt-suffix ::= **until** condition
         match(Tag.UNTIL);
-        condition();
+        Expr expr = condition();
+        return expr;
     }
-    public void while_stmt() throws IOException{
+    public Stmt while_stmt(Stmt savedStmt) throws IOException{
         // while-stmt ::= stmt-prefix stmt-list **end**
-        stmt_prefix();
-        stmt_list();
+        While whilenode = new While();
+        Stmt.Enclosing = whilenode;
+        Expr expr = stmt_prefix();
+        Stmt s1 = stmt_list();
         match(Tag.END);
+        whilenode.init(expr, s1);
+        Stmt.Enclosing = savedStmt;
+        return whilenode;
     }
     
-    public void stmt_prefix() throws IOException{
+    public Expr stmt_prefix() throws IOException{
         // stmt-prefix ::= **while** condition **do**
         match(Tag.WHILE);
-        condition();
+        Expr expr = condition();
         match(Tag.DO);
+        return expr;
     }
-    public void read_stmt() throws IOException{
+    public Stmt read_stmt() throws IOException{
         // read-stmt ::= **read** "(" identifier ")
         match(Tag.READ);
         match(Tag.ABRE_PARENTESES);
+        Token tok = look;
+        Id id = top.get(tok);
+        if (id == null) {
+            error(tok.toString()+ " Não declarado");
+            id = new Id((Palavra) tok, Tipo.ERROR, 0);
+            top.put(tok, id);
+        }
         match(Tag.IDENTIFICADOR);
         match(Tag.FECHA_PARENTESES);
+        Stmt stmt = new Call(tok, id);
+        return stmt;
         
     }
     
-    public void write_stmt() throws IOException{
+    public Stmt write_stmt() throws IOException{
         // write-stmt ::= write "(" writable ")"
         match(Tag.WRITE);
         match(Tag.ABRE_PARENTESES);
-        writable();
+        Token tok = look;
+        Expr expr = writable();
         match(Tag.FECHA_PARENTESES);
+        Stmt stmt = new Call(tok, expr);
+        return stmt;
         
     }
     
-    public void writable() throws IOException{
+    public Expr writable() throws IOException{
         // writable ::= simple-expr | literal
         if (look.tag == Tag.LITERAL){
+            Token tok = look;
             match(Tag.LITERAL);
+            return new Constant((Palavra) tok, null);
         }
-        else
-            simple_expr();
+        return simple_expr();
     }
     
-    public void expression() throws IOException{
+    public Expr expression() throws IOException{
         // expression ::= simple-expr | simple-expr relop simple-expr
-        simple_expr();
-        while (relop.contains(look.tag)){
+        Expr expr = simple_expr();
+        if (relop.contains(look.tag)){
+            Token tok = look;
             match(look.tag);
-            simple_expr();
+            Expr expr1 = new Rel(tok, expr, simple_expr());
+            return expr1;
         }
+        return expr;
     }
 
-    public void simple_expr() throws IOException{
+    public Expr simple_expr() throws IOException{
         // simple-expr ::= term | simple-expr addop term
         // simple-expr ::= term simple-expr-linha
-        term();
-        simple_expr_linha();
+//        term();
+//        simple_expr_linha()
+        return simple_expr_linha(term());
     }
     
-    public void simple_expr_linha() throws IOException{
+    public Expr simple_expr_linha(Expr expr1) throws IOException{
         // simple-expr ::= term | simple-expr addop term
         // simple-expr-linha ::= addop term simple-expr-linha
+        Expr expr;
         if (addop.contains(look.tag)){
+            Token tok = look;
             match(look.tag);
-            term();
-            simple_expr_linha();
+            if (tok.tag != Tag.OR) {
+                expr = new Arith(tok, expr1, term());
+            } else {
+                expr = new Logical(tok, expr1, term());
+            }
+            return simple_expr_linha(expr);
+            
         }
-        
+        return expr1;
     }
     
-    public void term() throws IOException{
+    public Expr term() throws IOException{
         // term ::= factor-a | term mulop factor-a
         // term ::= factor-a term-linha
-        factor_a();
-        term_linha();
+//        factor_a();
+//        term_linha();
+        return term_linha(factor_a());
     }
-    public void term_linha () throws IOException{
+    public Expr term_linha(Expr expr1) throws IOException{
         // term ::= factor-a | term mulop factor-a
         // term-linha ::= mulop factor-a term_linha
+        Expr expr;
         if (mulop.contains(look.tag)){
+            Token tok = look;
             match(look.tag);
-            factor_a();
-            term_linha();
+            if (tok.tag != Tag.AND){
+                expr = new Arith(tok, expr1, factor_a());
+            } else {
+                expr = new Logical(tok, expr1, factor_a());
+            }
+            return term_linha(expr);
         }
+        return expr1;
          
     }
-    public void factor_a() throws IOException{
+    public Expr factor_a() throws IOException{
         // fator-a ::= factor | **not** factor | "-" factor
         if (look.tag == Tag.NOT){
+            Token tok = look;
             match(Tag.NOT);
+            return new Unary((Palavra) tok, factor_a());
         } else if (look.tag == Tag.SUB_HIFEN){
+            Token tok = look;
             match(Tag.SUB_HIFEN);
+            return new Unary((Palavra) tok, factor_a());
         }
-        factor();
+        return factor();
+        
     }
-    public void factor() throws IOException{
+    public Expr factor() throws IOException{
+        Token token = look;
+        Expr val;
         if (look.tag == Tag.IDENTIFICADOR){
+            val = top.get(token);
+            if (val == null) error(token.toString()+ " Não declarado");
             match(Tag.IDENTIFICADOR);
         } else if (look.tag == Tag.CHAR_CONST) {
+            val = new Constant(token, Tipo.INT);
             match(Tag.CHAR_CONST);
         } else if (look.tag == Tag.FLOAT_CONST) {
+            val = new Constant(token, Tipo.FLOAT);
             match(Tag.FLOAT_CONST);
         } else if (look.tag == Tag.INT_CONST) {
+            val = new Constant(token, Tipo.INT);
             match(Tag.INT_CONST);
         } else if (look.tag == Tag.ABRE_PARENTESES) {
             match(Tag.ABRE_PARENTESES);
-            expression();
+            val = expression();
             match(Tag.FECHA_PARENTESES);
+            
         } else {
             error("Esperava um IDENTIFICADOR, CONSTANTE OU ABRE PARENTESES");
+            return null;
         }
+        return val;
     }
 }

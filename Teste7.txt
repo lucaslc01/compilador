@@ -29,6 +29,6 @@ declare
   write(meses);
   write(" e ");
   write(dias);
-  write(" de idade.");
+  write(" de idade.")
 
  end

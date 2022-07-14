@@ -8,7 +8,7 @@ package inter;
 import tabelaDeSimbolos.*;
 
 /**
- *
+ * Instruções a Elementos de Arranjo
  * @author pedro
  */
 public class SetElem extends Stmt {

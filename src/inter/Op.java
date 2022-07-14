@@ -15,9 +15,11 @@ public class Op extends Expr{
         super(token, tipo);
     }
     public Expr reduce() {
-        Expr x = gen();
+        // Gera um Termo
+        Expr x = gen(); 
         Temp t = new Temp(tipo);
-        emit( t.toString() + " = " + x.toString());
+        // Emite uma instrução para atribuir o termo a um novo nome temporário
+        emit( t.toString() + " = " + x.toString()); 
         return t;
     }
 }

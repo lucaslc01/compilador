@@ -5,6 +5,7 @@
  */
 package inter;
 
+import java.util.Vector;
 import lexico.*;
 
 /**
@@ -13,12 +14,13 @@ import lexico.*;
  */
 public class Node {
     int lexline = 0;
+    private static Vector<String> Erros = new Vector<String>();
     Node () {
         lexline = Lexer.linha;
     }
     
     void error (String s) {
-        throw new Error("Proximo à linha "+lexline+": "+s);
+        Erros.add("Proximo à linha "+lexline+": "+s+"\n");
     }
     static int labels = 0;
     public int newlabel() {
@@ -29,5 +31,13 @@ public class Node {
     }
     public void emit (String s) {
         System.out.println("\t"+s);
+    }
+    public void returnErros(){
+        if(Erros.size() > 0){
+            System.out.println("Erros Semânticos");
+            for(String msg : Erros){
+                System.out.print(msg);
+            }
+        }
     }
 }

@@ -21,6 +21,7 @@ public enum Tag {
     TEMP,
     INDEX,
     OPERADOR_INCORRETO,
+    ERROR,
     // Tipos de Variáveis
     BASIC,  // INT, FLOAT, CHAR,
     BOOL,

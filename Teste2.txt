@@ -1,12 +1,40 @@
+%
+L 1:
+	Token = IDENTIFICADOR Valor = b = Token = IDENTIFICADOR Valor = a Token = MULTIPLICACAO Token = IDENTIFICADOR Valor = a
+L 3:
+	t1 = Token = IDENTIFICADOR Valor = a Token = DIVISAO Token = INT_CONST Valor = 2
+	t2 = Token = INT_CONST Valor = 35 Token = DIVISAO Token = IDENTIFICADOR Valor = b
+	t3 = t1 Token = MULTIPLICACAO t2
+	Token = IDENTIFICADOR Valor = c = Token = IDENTIFICADOR Valor = b Token = SOMA t3
+L 4:
+L 5:
+	Token = IDENTIFICADOR Valor = val = Token = FLOAT_CONST Valor = 34.2
+L 6:
+	t4 = Token = IDENTIFICADOR Valor = val Token = SOMA Token = FLOAT_CONST Valor = 2.0
+	Token = IDENTIFICADOR Valor = c = t4 Token = SOMA Token = IDENTIFICADOR Valor = a
+L 7:
+L 2:
+Erros Sintáticos
+Próximo à linha 37: Token = IDENTIFICADOR Valor = val Não declarado
+Erros Semânticos
+Proximo à linha 37: Erro de tipo
+Proximo à linha 38: Erro de Tipo
+Proximo à linha 38: Erro de Tipo
+Proximo à linha 38: Erro de tipo
+Proximo à linha 40: Erro de Tipo
+Proximo à linha 40: Erro de Tipo
+Terminou
+%
 routine
+declare
  int a, b, c;
- float d, var
+ float d, var;
 begin
  read (a);
  b := a * a;
  c := b + a/2 * (35/b); %aplica formula%
- write c;
- val := 34.2
- c = val + 2.0 + a;
+ write (c);
+ val := 34.2;
+ c := val + 2.0 + a;
  write (val)
 end

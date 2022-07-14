@@ -14,6 +14,7 @@ import tabelaDeSimbolos.*;
  */
 public class Unary extends Op{
     public Expr expr;
+    // Também trata a subtração
     public Unary(Token token, Expr expr) {
         super(token, null);
         this.expr = expr;

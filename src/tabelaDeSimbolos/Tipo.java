@@ -19,6 +19,7 @@ public class Tipo extends Palavra {
     public static final Tipo FLOAT = new Tipo("float", Tag.BASIC, 8);
     public static final Tipo CHAR = new Tipo("char", Tag.BASIC, 1);
     public static final Tipo BOOL = new Tipo("bool", Tag.BOOL, 1);
+    public static final Tipo ERROR = new Tipo("error", Tag.ERROR, 0);
     
     // Funções para conversão de Tipo
     public static boolean numerico(Tipo tipo){
