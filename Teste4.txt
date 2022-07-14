@@ -1,3 +1,35 @@
+%
+L 1:
+	Token = IDENTIFICADOR Valor = pontuacaoMinima = Token = INT_CONST Valor = 50
+L 3:
+	Token = IDENTIFICADOR Valor = pontuacaoMaxima = Token = INT_CONST Valor = 100
+L 4:
+L 5:
+L 6:
+	iffalse Token = IDENTIFICADOR Valor = pontuacao Token = MAIOR_QUE Valor = > Token = INT_CONST Valor = 0 Token = AND Valor = and Token = IDENTIFICADOR Valor = pontuacao Token = MENOR_IGUAL Valor = <= Token = IDENTIFICADOR Valor = pontuacaoMaxima goto L7
+L 8:
+	iffalse Token = IDENTIFICADOR Valor = pontuação Token = MAIOR_QUE Valor = > Token = IDENTIFICADOR Valor = pontuacaoMinima Token = AND Valor = and Token = IDENTIFICADOR Valor = disponibilidade Token = IGUAL Token = INT_CONST Valor = 1 goto L10
+L 9:
+	goto L6
+L 10:
+	goto L6
+L 7:
+L 11:
+L 2:
+Erros Sintáticos
+Próximo à linha 39: Token = IDENTIFICADOR Valor = pontuacaoMaxima Não declarado
+Próximo à linha 48: Token = IDENTIFICADOR Valor = pontuação Não declarado
+Erros Semânticos
+Proximo à linha 39: Erro de tipo
+Proximo à linha 47: Erro de Tipo
+Proximo à linha 47: Erro de Tipo
+Proximo à linha 47: Erro de Tipo
+Proximo à linha 48: Erro de Tipo
+Proximo à linha 48: Erro de Tipo
+Proximo à linha 48: O IF precisa de um booleano
+Proximo à linha 47: O WHILE precisa de um booleano
+Terminou
+%
 routine
 declare
  int pontuacao, pontuacaoMaxina, disponibilidade;

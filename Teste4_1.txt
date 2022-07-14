@@ -1,0 +1,46 @@
+%
+L 1:
+	Token = IDENTIFICADOR Valor = pontuacaoMinima = Token = INT_CONST Valor = 50
+L 3:
+	Token = IDENTIFICADOR Valor = pontuacaoMaxima = Token = INT_CONST Valor = 100
+L 4:
+L 5:
+L 6:
+	iffalse Token = IDENTIFICADOR Valor = pontuacao Token = MAIOR_QUE Valor = > Token = INT_CONST Valor = 0 Token = AND Valor = and Token = IDENTIFICADOR Valor = pontuacao Token = MENOR_IGUAL Valor = <= Token = IDENTIFICADOR Valor = pontuacaoMaxima goto L7
+L 8:
+	iffalse Token = IDENTIFICADOR Valor = pontuacao Token = MAIOR_QUE Valor = > Token = IDENTIFICADOR Valor = pontuacaoMinima Token = AND Valor = and Token = IDENTIFICADOR Valor = disponibilidade Token = IGUAL Token = INT_CONST Valor = 1 goto L10
+L 9:
+	goto L6
+L 10:
+	goto L6
+L 7:
+L 11:
+L 2:
+Terminou
+%
+routine
+declare
+ int pontuacao, pontuacaoMaxima, disponibilidade;
+ int pontuacaoMinima;
+begin
+ pontuacaoMinima := 50;
+ pontuacaoMaxima := 100;
+ write("Pontuacao do candidato: ");
+ read(pontuacao);
+ write("Disponibilidade do candidato: ");
+ read(disponibilidade);
+%
+Processamento
+%
+ while ((pontuacao>0) and (pontuacao<=pontuacaoMaxima)) do
+ if ((pontuacao > pontuacaoMinima) and (disponibilidade=1)) then
+ write("Candidato aprovado.")
+ else
+ write("Candidato reprovado.")
+ end;
+ write("Pontuacao do candidato: ");
+ read(pontuacao);
+ write("Disponibilidade do candidato: ");
+ read(disponibilidade)
+ end
+end

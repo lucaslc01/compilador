@@ -1,3 +1,42 @@
+%
+L 1:
+	Token = IDENTIFICADOR Valor = diaatual = Token = INT_CONST Valor = 3
+L 3:
+	Token = IDENTIFICADOR Valor = mesatual = Token = INT_CONST Valor = 9
+L 4:
+	Token = IDENTIFICADOR Valor = anoatual = Token = INT_CONST Valor = 2022
+L 5:
+L 6:
+L 7:
+L 8:
+L 9:
+	t1 = Token = INT_CONST Valor = 365 Token = MULTIPLICACAO Token = IDENTIFICADOR Valor = anoatual
+	t2 = Token = INT_CONST Valor = 30 Token = MULTIPLICACAO Token = IDENTIFICADOR Valor = mesatual
+	t3 = t1 Token = SOMA t2
+	t4 = t3 Token = SOMA Token = IDENTIFICADOR Valor = diaatual
+	t5 = Token = INT_CONST Valor = 365 Token = MULTIPLICACAO Token = IDENTIFICADOR Valor = ano
+	t6 = t4 Token = SUB_HIFEN t5
+	t7 = Token = INT_CONST Valor = 30 Token = MULTIPLICACAO Token = IDENTIFICADOR Valor = mes
+	t8 = t6 Token = SUB_HIFEN t7
+	Token = IDENTIFICADOR Valor = calculo = t8 Token = SUB_HIFEN Token = IDENTIFICADOR Valor = dia
+L 10:
+	Token = IDENTIFICADOR Valor = anos = Token = IDENTIFICADOR Valor = calculo Token = DIVISAO Token = INT_CONST Valor = 365
+L 11:
+	Token = IDENTIFICADOR Valor = meses = Token = IDENTIFICADOR Valor = calculo Token = DIVISAO Token = INT_CONST Valor = 30
+L 12:
+	t9 = Token = IDENTIFICADOR Valor = calculo Token = MULTIPLICACAO Token = INT_CONST Valor = 365
+	t10 = t9 Token = MULTIPLICACAO Token = INT_CONST Valor = 30
+	Token = IDENTIFICADOR Valor = dias = Token = IDENTIFICADOR Valor = calculo Token = SUB_HIFEN t10
+L 13:
+L 14:
+L 15:
+L 16:
+L 17:
+L 18:
+L 19:
+L 2:
+Terminou
+%
 routine
 declare
  int dias, dia, meses, mes, anos, ano, calculo, diaatual, mesatual, anoatual;

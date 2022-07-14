@@ -214,6 +214,7 @@ public class Parser {
         if (look.tag == Tag.ELSE) {
             match(Tag.ELSE);
             Stmt s2 = stmt_list();
+            match(Tag.END);
             return new Else(expr, s1, s2);
         }
         match(Tag.END);
@@ -246,8 +247,8 @@ public class Parser {
         Stmt.Enclosing = whilenode;
         Expr expr = stmt_prefix();
         Stmt s1 = stmt_list();
-        match(Tag.END);
         whilenode.init(expr, s1);
+        match(Tag.END);
         Stmt.Enclosing = savedStmt;
         return whilenode;
     }
@@ -380,10 +381,13 @@ public class Parser {
         Expr val;
         if (look.tag == Tag.IDENTIFICADOR){
             val = top.get(token);
-            if (val == null) error(token.toString()+ " Não declarado");
+            if (val == null) {
+                error(token.toString()+ " Não declarado");
+                val = new Constant(token, Tipo.ERROR);
+            }
             match(Tag.IDENTIFICADOR);
         } else if (look.tag == Tag.CHAR_CONST) {
-            val = new Constant(token, Tipo.INT);
+            val = new Constant(token, Tipo.CHAR);
             match(Tag.CHAR_CONST);
         } else if (look.tag == Tag.FLOAT_CONST) {
             val = new Constant(token, Tipo.FLOAT);

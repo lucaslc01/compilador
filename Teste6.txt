@@ -1,3 +1,20 @@
+%
+L 1:
+	Token = IDENTIFICADOR Valor = raio = Token = INT_CONST Valor = 0
+L 3:
+	Token = IDENTIFICADOR Valor = volume = Token = INT_CONST Valor = 0
+L 4:
+L 5:
+L 6:
+	t1 = Token = INT_CONST Valor = 4 Token = MULTIPLICACAO Token = FLOAT_CONST Valor = 3.1399999
+	t2 = t1 Token = MULTIPLICACAO Token = IDENTIFICADOR Valor = raio
+	t3 = Token = IDENTIFICADOR Valor = raio Token = DIVISAO Token = INT_CONST Valor = 3
+	Token = IDENTIFICADOR Valor = volume = t2 Token = MULTIPLICACAO t3
+L 7:
+L 8:
+L 2:
+Terminou
+%
 routine
 declare
  float raio, volume;

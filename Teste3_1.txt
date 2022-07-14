@@ -1,6 +1,6 @@
 %
 L 1:
-	Token = IDENTIFICADOR Valor = B = Token = INT_CONST Valor = 0
+	Token = IDENTIFICADOR Valor = b = Token = INT_CONST Valor = 0
 L 3:
 	iffalse Token = IDENTIFICADOR Valor = a Token = DIFERENTE Valor = <> Token = IDENTIFICADOR Valor = b goto L4
 L 5:
@@ -15,22 +15,14 @@ L 6:
 L 10:
 L 4:
 L 2:
-Erros Sintáticos
-Próximo à linha 33: Token = IDENTIFICADOR Valor = B Não declarado
-Erros Semânticos
-Proximo à linha 33: Erro de tipo
-Proximo à linha 36: Erro de Tipo
-Proximo à linha 38: Erro de Tipo
-Proximo à linha 36: O If precisa de um booleano
-Proximo à linha 36: O If precisa de um booleano
 Terminou
 %
 routine
 declare
  int a, aux;
- float b;
+ int b;
  begin
-  B := 0;
+  b := 0;
   read (a);
   read(b);
   if (a<> b) then

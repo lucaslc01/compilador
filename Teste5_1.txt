@@ -18,15 +18,8 @@ L 7:
 L 12:
 L 13:
 L 3:
-	if Token = IDENTIFICADOR Valor = outro Token = IGUAL Token = CHAR_CONST Valor = 'N' Token = OR Valor = or Token = IDENTIFICADOR Valor = outrogoto L1
+	if Token = IDENTIFICADOR Valor = outro Token = IGUAL Token = CHAR_CONST Valor = 'N' Token = OR Valor = or Token = IDENTIFICADOR Valor = outro Token = IGUAL Token = CHAR_CONST Valor = 'n'goto L1
 L 2:
-Erros Sintáticos
-Próximo à linha 59: Erro sintático - Era esperado um FECHA_PARENTESES
-Próximo à linha 59: Erro sintático - Era esperado um END
-Erros Semânticos
-Proximo à linha 59: Erro de Tipo
-Proximo à linha 59: Erro de Tipo
-Proximo à linha 59: O REPEAT precisa de um booleano
 Terminou
 %
 routine
@@ -56,5 +49,5 @@ begin
  write (maior);
  write ("Outro? (S/N)");
  read(outro)
- until (outro = 'N' or outro = 'n')
+ until ((outro = 'N') or (outro = 'n'))
 end
